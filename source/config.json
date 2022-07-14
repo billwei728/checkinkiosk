@@ -1,0 +1,11 @@
+{
+	"appname" : "Check-In Kiosk",
+
+	"database": {
+		"type"    : "mysql",
+        "host"    : "localhost",
+	    "username": "abc",
+	    "password": "abc",
+	    "database": "abc"
+	}
+}

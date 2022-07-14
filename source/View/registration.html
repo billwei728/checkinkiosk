@@ -1,0 +1,72 @@
+
+    <div id="registration">
+        <div class="text-center my-3" id="title">
+            <h3>Welcome!</h3>
+            <hr class="m-auto" style="width: 6%;">
+        </div>
+
+        <div id="content">
+            <form class="row g-3 needs-validation" novalidate>
+                <div class="form-group mb-3">
+                    <label for="name" class="form-label">Event</label>
+                    <select class="form-select w-100" id="eventid" name="eventid" required>
+                        <option selected>Please select an event</option>
+                        <option value="1">PC Fair</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select an event to participate.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="100" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid name.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" maxlength="255" aria-describedby="emailHelp" required>
+                    <div id="emailHelp" class="form-text blockquote-footer">
+                        We'll never share your email with anyone else.
+                    </div>
+                    <div class="invalid-feedback">
+                        Please provide a valid email address.
+                    </div>
+                </div>
+
+                <div class="d-grid d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-outline-primary" id="btnSubmit">
+                        Next
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        $("form").on("submit", function (event) {
+            // event.preventDefault();
+
+            var formValues = $(this).serialize();
+                formValues += "&handler=User&action=register";
+
+            $.ajax({
+                type: "POST",
+                url: "index.php",
+                data: formValues,
+                success: function (data) {
+                    const result = JSON.parse(data);
+
+                    if (! result.success) {
+                        notification(result.errMsg, 0);
+                        return;
+                    }
+
+                    pageReload("introduction");
+                }
+            });
+
+            return false;
+        });
+    </script>

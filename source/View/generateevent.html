@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en_us">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .notifyjs-bootstrap-base {
+            background-position: 3px 8px !important;
+            font-size: 0.8125rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="event">
+            <div class="text-center my-3" id="title">
+                <h3>Generate Event</h3>
+                <hr class="m-auto" style="width: 6%;">
+            </div>
+
+            <div>
+                <form id="event-form" class="row g-3 needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" maxlength="100" value="" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid name.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Number of Booth</label>
+                        <input type="number" class="form-control" id="nobooth" name="nobooth" max="6" value="" required>
+                        <div class="invalid-feedback">
+                            Please enter at least one number.
+                        </div>
+                    </div>
+
+                    <div class="d-grid d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-outline-primary" id="btnNext">
+                            Next
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="event-registration">
+            <div class="text-center my-3" id="title">
+                <h3>Event Details</h3>
+                <hr class="m-auto" style="width: 6%;">
+            </div>
+
+            <div>
+                <form id="event-registration-form" class="row g-3 needs-validation" novalidate>
+                    <div id="boothlist"></div>
+
+                    <input type="hidden" class="form-control" id="eventname" name="eventname">
+
+                    <div class="d-grid d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-outline-primary" id="btnSubmit">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventmodal" tabindex="-1" aria-labelledby="eventTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row" id="eventQr"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <!-- Notification -->
+    <script src="View/resources/js/notify.min.js"></script>  
+
+    <script>
+        var nobooth = '';
+
+        $(document).ready(function () {
+            $("#event-registration").hide();
+        });
+
+        function notification(message, bSuccess) {
+            if (0 == bSuccess) {
+                $.notify(message, { className: "error", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (1 == bSuccess) {
+                $.notify(message, { className: "success", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (2 == bSuccess) {
+                $.notify(message, { className: "info", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (3 == bSuccess) {
+                $.notify(message, { className: "warn", position: "bottom right", autoHideDelay: 500000 });
+            }
+        }
+
+        $("#btnNext").click(function () {
+            var forminput = '';
+            nobooth = $("#nobooth").val();
+
+            for (let i = 0; i < nobooth; i++) {
+                forminput += '<div class="mb-3"><label class="form-label">Booth Name '+ (i+1) +'</label><input type="text" class="form-control" name="name_'+ i +'" maxlength="100" required><div class="invalid-feedback">Please provide a valid name.</div></div>';
+            }
+
+            $("#event").slideUp();
+            $("#event-registration").show();
+            $("#eventname, #eventTitle").val($("#name").val());
+            $("#boothlist").append(forminput);
+        });
+
+        $("#event-form").on("submit", function (event) {
+            return false;
+        });
+
+        $("#event-registration-form").on("submit", function (event) {
+            var formValues = $(this).serialize();
+                formValues += "&handler=Event&action=register";
+
+            $.ajax({
+                type: "POST",
+                url: "admin.php",
+                data: formValues,
+                success: function (data) {
+                    const result = JSON.parse(data);
+
+                    if (! result.success) {
+                        notification(result.errMsg, 0);
+                        return;
+                    }
+
+                    notification("Booth are added successfully!", 1);
+
+                    $("#event").show();
+                    $("#event-registration").slideUp();
+                    $("#event-form")[0].reset();
+                    $("#event-form").removeClass("was-validated");
+                    $("#boothlist").empty();
+
+                    displayQRCode();
+                }
+            });
+
+            return false;
+        });
+
+        function displayQRCode() {
+            var qrcodes = '';
+
+            for (let i = 1; i <= nobooth; i++) {
+                qrcodes += '<div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">' +
+                             '<a class="btn btn-outline-secondary w-75">' +
+                               '<div class="p-2 mt-2"><span><i class="fa-solid fa-qrcode fa-2x mb-2"></i></span><h6>Booth '+ i +'</h6></div>' +
+                             '</a>' +
+                           '</div>';
+            }
+            console.log(qrcodes);
+
+            $("#eventQr").append(qrcodes);
+
+            $("#eventmodal").modal("toggle");
+        }
+
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>

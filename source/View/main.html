@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en_us">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/css/bootstrap-select.min.css" integrity="sha512-g2SduJKxa4Lbn3GW+Q7rNz+pKP9AWMR++Ta8fgwsZRCUsawjPvF/BxSMkGS61VsR9yinGoEgrHPGPn2mrj8+4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .notifyjs-bootstrap-base {
+            background-position: 3px 8px !important;
+            font-size: 0.8125rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="contentDiv"></div>
+    </div>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js" integrity="sha512-yrOmjPdp8qH8hgLfWpSFhC/+R9Cj9USL8uJxYIveJZGAiedxyIxwNw4RsLDlcjNlIRR4kkHaDHSmNHAkxFTmgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Notification -->
+    <script src="View/resources/js/notify.min.js"></script>    
+
+    <script>
+        $(document).ready(function () {
+            let page = ($.cookie('inevent')) ? "event" : "registration";
+            console.log('page', page);
+            pageReload(page);
+        });
+
+        function notification(message, bSuccess) {
+            if (0 == bSuccess) {
+                $.notify(message, { className: "error", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (1 == bSuccess) {
+                $.notify(message, { className: "success", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (2 == bSuccess) {
+                $.notify(message, { className: "info", position: "bottom right", autoHideDelay: 500000 });
+            }
+            if (3 == bSuccess) {
+                $.notify(message, { className: "warn", position: "bottom right", autoHideDelay: 500000 });
+            }
+        }
+
+        function pageReload(page) {
+            var formValues = `page=${page}`;
+
+            $.ajax({
+                type: "POST",
+                url: "index.php",
+                data: formValues,
+                success: function (data) {
+                    const result = JSON.parse(data);
+
+                    if (! result.success) {
+                        notification(result.errMsg, 0);
+                        return;
+                    }
+
+                    $("#contentDiv").load(`${result.page}`);
+                }
+            });
+        }
+
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>

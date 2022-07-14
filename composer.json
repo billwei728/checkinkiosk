@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "source/"
+        }
+    },
+
+    "require": {
+        "clancats/hydrahon": "^1.1"
+    }
+}

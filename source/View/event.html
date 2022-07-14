@@ -1,0 +1,104 @@
+
+    <div id="event">
+        <div class="text-center my-3" id="title">
+            <h3>Hurry!</h3>
+            <hr class="m-auto" style="width: 6%;">
+        </div>
+
+        <div id="content">
+            <div class="text-center my-2">
+                <div class="alert alert-light mb-0 p-4">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                            <a class="btn btn-outline-secondary w-75" data-bs-toggle="modal" data-bs-target="#qrmodal">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 1</h6></div>
+                            </a>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 2</h6></div>
+                            </a>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6">
+                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 3</h6></div>
+                            </a>
+                        </div>
+
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 4</h6></div>
+                            </a>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 5</h6></div>
+                            </a>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-6">
+                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 6</h6></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="qrmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Booth 1</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Scan</button>
+                    <button type="button" class="btn btn-outline-primary">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnStart").prop("disabled", true);
+
+            $("#isreadtnc").change(function () {
+                if ($("#isreadtnc").is(":checked")) {
+                    $("#btnStart").prop("disabled", false);
+                    $("#isreadtnc").attr("value", 1);
+                } else {
+                    $("#btnStart").prop("disabled", true);
+                    $("#isreadtnc").attr("value", 0);
+                }
+            });
+        });
+        
+        $("form").on("submit", function (event) {
+            var formValues = $(this).serialize();
+                formValues += "&handler=Registration&action=readtnc";
+
+            $.ajax({
+                type: "POST",
+                url: "index.php",
+                data: formValues,
+                success: function (data) {
+                    const result = JSON.parse(data);
+
+                    if (! result.success) {
+                        notification(result.errMsg, false);
+                        return;
+                    }
+
+                    location.reload();
+                }
+            });
+
+            return false;
+        });
+    </script>
