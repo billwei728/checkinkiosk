@@ -1,0 +1,76 @@
+
+    <div id="introduction">
+        <div class="text-center my-3" id="title">
+            <h3>Important!</h3>
+            <hr class="m-auto" style="width: 6%;">
+        </div>
+
+        <div id="content">
+            <div class="card shadow my-2">
+                <div class="alert alert-light mb-0 p-4">
+                    <h6>Notes:</h6>
+
+                    <ol class="">
+                        <li>You have a total of 6 booths to visit.</li>
+                        <li>Each booth has a different QR code provided.</li>
+                        <li>Scan the QR code!</li>
+                        <li>You are given 30 minutes to complete the event.</li>
+                        <li>The winner depends on the shortest time taken.</li>
+                    </ol>
+
+                    <p><strong>Tips</strong>: Follow the instructions, Thank you and have a nice day.</p>
+                </div>
+            </div>
+            <form>
+                <div class="form-check ms-2">
+                    <input class="form-check-input" type="checkbox" value="" id="isreadtnc" name="isreadtnc">
+                    <label class="form-check-label" for="isreadtnc">
+                        I have read and understand the instructions!
+                    </label>
+                </div>
+
+                <div class="d-grid d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-outline-primary" id="btnStart">Let's Start</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnStart").prop("disabled", true);
+
+            $("#isreadtnc").change(function () {
+                if ($("#isreadtnc").is(":checked")) {
+                    $("#btnStart").prop("disabled", false);
+                    $("#isreadtnc").attr("value", 1);
+                } else {
+                    $("#btnStart").prop("disabled", true);
+                    $("#isreadtnc").attr("value", 0);
+                }
+            });
+        });
+        
+        $("form").on("submit", function (event) {
+            var formValues = $(this).serialize();
+                formValues += "&handler=User&action=readtnc";
+
+            $.ajax({
+                type: "POST",
+                url: "index.php",
+                data: formValues,
+                success: function (data) {
+                    const result = JSON.parse(data);
+
+                    if (! result.success) {
+                        notification(result.errMsg, false);
+                        return;
+                    }
+
+                    pageReload("event");
+                }
+            });
+
+            return false;
+        });
+    </script>
