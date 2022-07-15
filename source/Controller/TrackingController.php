@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\App;
 use Exception;
 
-class BoothController
+class TrackingController
 {
 	private ?object $model = null;
 
@@ -18,29 +18,28 @@ class BoothController
     public function doAction(App $app, string $action, array $params = []): array 
     {
     	if ($action == 'register') {
-    		return $this->doRegisterBooth($app, $params);
+    		return $this->doRegisterTracking($app, $params);
     	}
         if ($action == 'select') {
-            return $this->doSelectBooth($app, $params);
+            return $this->doSelectTracking($app, $params);
         }
     }
 
-    protected function doRegisterBooth(App $app, array $params = []): array 
+    protected function doRegisterTracking(App $app, array $params = []): array 
     {
     	$response = array('success' => true, 'errMsg' => '');
-    	$eventid = trim($params['eventid']);
-
-        $booths = [];
-        foreach ($params as $key => $value) {
-            if (str_starts_with($key, 'name_')) {
-                $booths[]['name'] = $value;
-            }
-        }
 
     	try {
-            foreach ($booths as $num => $booth) {
-                $result = $this->model->save(['eventid' => $eventid, 'name' => $booth['name']]);
-            }            
+            $boothController = $app->getController('Booth');
+            $booths = $boothController->doAction($app, 'select', ['eventid' => $params['eventid']]);
+
+            foreach ($booths['data'] as $num => $booth) {
+                $result = $this->model->save([
+                    'userid'  => $_SESSION['userid'], 
+                    'eventid' => $params['eventid'], 
+                    'boothid' => $booth['id']
+                ]);
+            }
 
             if (! $result['success']) {
             	$response = array('success' => $result['success'], 'errMsg' => $result['errMsg']);
@@ -52,12 +51,12 @@ class BoothController
         return $response;
     }
 
-    protected function doSelectBooth(App $app, array $params = []): array 
+    protected function doSelectTracking(App $app, array $params = []): array 
     {
         $response = array('success' => true, 'errMsg' => '');
 
         try {
-            $result = $this->model->select($params); 
+            $result = $this->model->select(); 
 
             if (! $result['success']) {
                 $response = array('success' => $result['success'], 'errMsg' => $result['errMsg'], 'data' => $result['data']);
@@ -74,7 +73,7 @@ class BoothController
 
     private function setModel(App $app): void
     {
-    	$className = 'App\Model\BoothModel';
+    	$className = 'App\Model\TrackingModel';
         $reflection = new \ReflectionClass($className);
 
     	$this->model = $reflection->newInstanceArgs([$app]);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controller;
+namespace App\Controller;
 
 use App\App;
 use Exception;
@@ -30,7 +30,6 @@ class UserController
 
     protected function doRegisterUser(App $app, array $params = []): array 
     {
-    	$bSuccess = true;
     	$response = array('success' => true, 'errMsg' => '');
     	$params['name'] = trim($params['name']);
     	$params['email'] = trim($params['email']);
@@ -41,6 +40,15 @@ class UserController
             if (! $result['success']) {
             	$response = array('success' => $result['success'], 'errMsg' => $result['errMsg']);
             }
+
+            unset($params['name'], $params['email']);
+
+            $boothController = $app->getController('Tracking');
+            $result = $boothController->doAction($app, 'register', $params);
+
+            if (! $result['success']) {
+                $response = array('success' => $result['success'], 'errMsg' => $result['errMsg']);
+            }
         } catch (\PDOException $error) {
             throw new \Exception('[' . get_class($this) . ' - ' . __FUNCTION__ . '] ' . $error->getMessage());
         }
@@ -50,7 +58,6 @@ class UserController
 
     protected function doPassTNC(App $app, array $params = []): array 
     {
-    	$bSuccess = true;
     	$response = array('success' => true, 'errMsg' => '');
 
     	try {

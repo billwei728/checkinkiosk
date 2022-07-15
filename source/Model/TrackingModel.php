@@ -5,7 +5,7 @@ namespace App\Model;
 use App\App;
 use Exception;
 
-class BoothModel extends BaseModel //implements ModelInterface
+class TrackingModel extends BaseModel //implements ModelInterface
 {
 
     public function __construct(App $app)
@@ -20,14 +20,6 @@ class BoothModel extends BaseModel //implements ModelInterface
         }
 
         $dbtable = $this->getHydrahon()->table($this->getTable());
-
-        $bExists = $dbtable->select()
-                           ->where('name', $params['name'])
-                           ->exists();
-
-        if ($bExists) {
-            throw new Exception(gettext('This booth name is already being used. Please try with another name!'));
-        }
 
         $fields = $this->getColumn();
         foreach ($fields as $column => $value) {
@@ -52,12 +44,39 @@ class BoothModel extends BaseModel //implements ModelInterface
         }
     }
 
+    public function update(array $params = []) 
+    {
+        if (empty($params)) {
+            throw new Exception(gettext('There is no data to update.'));
+        }
+
+        $dbtable = $this->getHydrahon()->table($this->getTable());
+
+        $bExists = $dbtable->select()
+                           ->where('id', $_SESSION['userid'])
+                           ->exists();
+
+        if (! $bExists) {
+            throw new Exception(gettext('The user ID was invalid. Please contact the administrator!'));
+        }
+
+        $update = $dbtable->update();
+        $update->set($params);
+        $update->where('id', $_SESSION['userid']);
+
+        if ($update->execute()) {
+            return array('success' => true);
+        } else {
+            return array('success' => false, 'errMsg' => gettext('Failed to update record.'));
+        }
+    }
+
     public function select(array $filter = [], array $fields = []) 
     {
         $dbtable = $this->getHydrahon()->table($this->getTable());
 
         $select = $dbtable->select($fields)
-                          ->where($filter)
+                          ->where('userid', $_SESSION['userid'])
                           ->execute();
 
         if ($select) {
@@ -69,8 +88,16 @@ class BoothModel extends BaseModel //implements ModelInterface
 
     public function isValid($columns): bool 
     {
-        if (empty($columns['name'])) {
-            throw new Exception(gettext('Booth Name cannot be empty!'));
+        if (empty($columns['userid'])) {
+            throw new Exception(gettext('User ID cannot be empty!'));
+        }
+
+        if (empty($columns['eventid'])) {
+            throw new Exception(gettext('Event ID cannot be empty!'));
+        }
+
+        if (empty($columns['boothid'])) {
+            throw new Exception(gettext('Booth ID cannot be empty!'));
         }
 
         return true;
@@ -80,8 +107,9 @@ class BoothModel extends BaseModel //implements ModelInterface
     {
         return array(
             'id'         => 0,
+            'userid'     => 0,
             'eventid'    => 0,
-            'name'       => '',
+            'boothid'    => 0,
             'status'     => 1,
             'createdon'  => '',
             'modifiedon' => ''
@@ -90,7 +118,7 @@ class BoothModel extends BaseModel //implements ModelInterface
 
     private function getTable(): string 
     {
-        return 'booth';
+        return 'tracking';
     }
 }
 
