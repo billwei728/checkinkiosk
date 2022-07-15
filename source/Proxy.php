@@ -3,13 +3,13 @@
 session_start();
 
 if (! defined('MODE')) {
-	die ('Sorry, You have visited an empty page!');
+	die ('Sorry, you have visited an empty page!');
 } else {
 	define('CONFIG', 'config.json');
 }
 
-include_once('App.php');
 require_once('../vendor/autoload.php');
+include_once('App.php');
 
 try {
 	$app = App\app::getInstance(CONFIG, MODE);
