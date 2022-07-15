@@ -13,6 +13,8 @@ class App
 
     private ?object $dbHandle = null;
 
+    private string $mainPage = 'View/main.html';
+
 
 	private function __construct(string $configFile = '', string $operatingMode = '') 
     {
@@ -54,7 +56,6 @@ class App
     private function requestRouter(array $extraParams = []): void
     {
         $params = (isset($_POST) && ! empty($_POST)) ? $_POST : ((isset($_GET) && ! empty($_GET)) ? $_GET : []);
-        $filepath = 'View/main.html';
         $visitpage = '';
 
         if (isset($params['page'])) {
@@ -62,7 +63,7 @@ class App
             unset($params['page']);
         }
 
-        if (0 === count($params)) {
+        if (count($params) === 0) {
             if (isset($_SESSION['userid'])) {
                 $controller = $this->getController('User');
                 $result = $controller->doAction($this, 'checktnc');
@@ -73,15 +74,15 @@ class App
                     }
                 }
 
-                if (strlen($visitpage) === 0) {
-                    session_destroy();
-                }   
+                // if (strlen($visitpage) === 0) {
+                //     session_destroy();
+                // }   
             }
 
             if (strlen($visitpage > 0)) {
                 echo json_encode(array('success' => true, 'page' => 'View/' . $visitpage . '.html'));
             } else {
-                echo $this->getView($filepath);
+                echo $this->getView($this->mainPage);
             }
         } else {
             $handler = $params['handler'];
@@ -125,10 +126,14 @@ class App
 
     public function getController($handler): object
     {
-        $className = 'App\Controller\\' . $handler . 'Controller';
+        try {
+            $className = 'App\Controller\\' . $handler . 'Controller';
 
-        $reflection = new \ReflectionClass($className);
-        return $reflection->newInstanceArgs([$this]);
+            $reflection = new \ReflectionClass($className);
+            return $reflection->newInstanceArgs([$this]);
+        } catch (\Exception $error) {
+            throw new \Exception('[' . get_class($this) . ' - ' . __FUNCTION__ . '] ' . $error->getMessage());
+        }
     }
 
     private function getView(string $filepath): string
