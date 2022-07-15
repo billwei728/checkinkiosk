@@ -1,22 +1,17 @@
 
     <div id="registration">
-        <div class="text-center my-3" id="title">
-            <h3>Welcome!</h3>
-            <hr class="m-auto" style="width: 6%;">
-        </div>
-
-        <div id="content">
-            <form class="row g-3 needs-validation" novalidate>
-                <div class="form-group mb-3">
-                    <label for="name" class="form-label">Event</label>
-                    <select class="form-select w-100" id="eventid" name="eventid" required>
-                        <option selected>Please select an event</option>
-                        <option value="1">PC Fair</option>
-                    </select>
-                    <div class="invalid-feedback">
-                        Please select an event to participate.
-                    </div>
+        <form id="registration-form" class="row g-3 needs-validation" novalidate>
+            <div class="form-group mb-3">
+                <label for="name" class="form-label">Event</label>
+                <select class="form-select w-100" id="eventid" name="eventid" required>
+                    <option value="0" selected disabled>Please select an event</option>
+                    <option value="1">PC Fair</option>
+                </select>
+                <div class="invalid-feedback">
+                    Please select an event to participate.
                 </div>
+            </div>
+            <div class="mt-0" id="userDetails">
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" maxlength="100" required>
@@ -40,33 +35,35 @@
                         Next
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
     
     <script>
-        $("form").on("submit", function (event) {
+        $(document).ready(function () {
+            $('#userDetails').hide();
+        });
+
+        $('#eventid').on('change', function () {
+            if (0 < this.value) {
+                $('#userDetails').slideDown();
+            } else {
+                $('#userDetails').slideUp();
+            }
+        });
+
+        $('#registration-form').on('submit', function (event) {
             // event.preventDefault();
 
             var formValues = $(this).serialize();
-                formValues += "&handler=User&action=register";
+                formValues += '&handler=User&action=register';
 
-            $.ajax({
-                type: "POST",
-                url: "index.php",
-                data: formValues,
-                success: function (data) {
-                    const result = JSON.parse(data);
-
-                    if (! result.success) {
-                        notification(result.errMsg, 0);
-                        return;
-                    }
-
-                    pageReload("introduction");
-                }
-            });
+            onSubmitRequest(formValues, false);
 
             return false;
         });
+
+        let onPostSubmitRequest = (response) => {
+            pageReload('introduction');
+        }
     </script>

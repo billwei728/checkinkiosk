@@ -1,104 +1,114 @@
 
     <div id="event">
-        <div class="text-center my-3" id="title">
-            <h3>Hurry!</h3>
-            <hr class="m-auto" style="width: 6%;">
-        </div>
-
-        <div id="content">
-            <div class="text-center my-2">
-                <div class="alert alert-light mb-0 p-4">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
-                            <a class="btn btn-outline-secondary w-75" data-bs-toggle="modal" data-bs-target="#qrmodal">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 1</h6></div>
-                            </a>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
-                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 2</h6></div>
-                            </a>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6">
-                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 3</h6></div>
-                            </a>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
-                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 4</h6></div>
-                            </a>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
-                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 5</h6></div>
-                            </a>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-6">
-                            <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
-                                <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 6</h6></div>
-                            </a>
-                        </div>
+        <div class="text-center my-2">
+            <div class="alert alert-light mb-0 p-4">
+                <div class="row" id="boothDiv">
+                    <!-- <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                        <a class="btn btn-outline-secondary w-75" data-bs-toggle="modal" data-bs-target="#qrmodal">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 1</h6></div>
+                        </a>
                     </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                        <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 2</h6></div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-6">
+                        <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 3</h6></div>
+                        </a>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                        <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 4</h6></div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">
+                        <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 5</h6></div>
+                        </a>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-6">
+                        <a class="btn btn-outline-secondary w-75" href="payment/bankselection.php">
+                            <div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth 6</h6></div>
+                        </a>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="qrmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="qrmodal" tabindex="-1" aria-labelledby="boothModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Booth 1</h5>
+                    <h5 class="modal-title" id="boothModal"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" id="boothid" name="boothid">
                     ...
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Scan</button>
-                    <button type="button" class="btn btn-outline-primary">Next</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="onClickScan()">Scan</button>
+                    <!-- <button type="button" class="btn btn-outline-primary">Next</button> -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function () {
-            $("#btnStart").prop("disabled", true);
+        var noBoothCount = 0;
+        var successCount = 0;
 
-            $("#isreadtnc").change(function () {
-                if ($("#isreadtnc").is(":checked")) {
-                    $("#btnStart").prop("disabled", false);
-                    $("#isreadtnc").attr("value", 1);
-                } else {
-                    $("#btnStart").prop("disabled", true);
-                    $("#isreadtnc").attr("value", 0);
-                }
-            });
+        $(document).ready(function () {
+            $('#title').html('Hurry!');
+
+            onSubmitRequest('handler=Tracking&action=select', false);
         });
         
-        $("form").on("submit", function (event) {
-            var formValues = $(this).serialize();
-                formValues += "&handler=Registration&action=readtnc";
+        // $('form').on('submit', function (event) {
+        //     var formValues = $(this).serialize();
+        //         formValues += '&handler=Event&action=readtnc';
 
-            $.ajax({
-                type: "POST",
-                url: "index.php",
-                data: formValues,
-                success: function (data) {
-                    const result = JSON.parse(data);
+        //     onSubmitRequest(formValues, false);
 
-                    if (! result.success) {
-                        notification(result.errMsg, false);
-                        return;
-                    }
+        //     return false;
+        // });
 
-                    location.reload();
-                }
+        onPostSubmitRequest = (response) => {
+            console.log(response);
+            var booths = '';
+
+            $.each(response.data, function (index, booth) {
+                booths += '<div class="col-xl-4 col-lg-4 col-md-4 col-6 mb-1">' +
+                            '<a class="btn btn-outline-secondary w-75" href="javascript:onClickBooth('+ (index+1) +')" id="booth_'+ (index+1) +'">' +
+                              '<div class="p-2 mt-2"><span><i class="fa-solid fa-mask-ventilator fa-2x mb-2"></i></span><h6>Booth '+ (index+1) +'</h6></div>' +
+                            '</a>' + 
+                          '</div>';
+                noBoothCount++;
             });
 
-            return false;
-        });
+            $('#boothDiv').html(booths);
+        }
+
+        let onClickBooth = (boothid) => {            
+            $('#boothid').val(boothid);
+            $('#boothModal').text(`Booth - ${boothid}`);
+            $('#qrmodal').modal('toggle');
+        }
+
+        let onClickScan = () => {
+            let boothid = $('#boothid').val();
+
+            $('#booth_'+boothid).addClass('done');
+            $('#qrmodal').modal('hide');
+
+            successCount++;
+            if (successCount == noBoothCount) {
+                alert('Congratulation! You have complete the event. Please visit to our counter to redeem your gift, thank you');
+            }
+            
+        }
     </script>
